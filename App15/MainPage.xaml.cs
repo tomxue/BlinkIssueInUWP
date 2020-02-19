@@ -47,7 +47,6 @@ namespace App15
             public string icon_url { get; set; }
         }
 
-        private Hashtable iconDataHT;
         DataModel[] dms;
         TestDataList[] list;
         int listLength;
@@ -59,9 +58,6 @@ namespace App15
 
             ApplicationView.PreferredLaunchWindowingMode = ApplicationViewWindowingMode.FullScreen;
 
-            //double appVolume = App.GetAppVolume();
-            double appVolume = 0.8;
-
             InitUIData();
         }
 
@@ -69,7 +65,6 @@ namespace App15
         {
             string payload = "[{\"data_type\":\"xjingf\",\"data_name\":\"小晶\",\"ssml_support\":true,\"icon_url\":\"ms-appx:///Assets/femalePY.png\"},{\"data_type\":\"zhilingf\",\"data_name\":\"小灵\",\"ssml_support\":true,\"icon_url\":\"ms-appx:///Assets/femaleSoft.png\"},{\"data_type\":\"qianranfa\",\"data_name\":\"苒苒\",\"ssml_support\":true,\"icon_url\":\"ms-appx:///Assets/femaleCute.png\"},{\"data_type\":\"xijunm\",\"data_name\":\"小君\",\"ssml_support\":true,\"icon_url\":\"ms-appx:///Assets/maleCharm.png\"},{\"data_type\":\"boy\",\"data_name\":\"糖糖\",\"ssml_support\":true,\"icon_url\":\"ms-appx:///Assets/maleCute.png\"},{\"data_type\":\"xiaoxin\",\"data_name\":\"小鑫\",\"ssml_support\":true,\"icon_url\":\"ms-appx:///Assets/maleCute.png\"}]";
             list = JsonData<TestDataList[]>(payload);
-            iconDataHT = new Hashtable();
             listLength = list.Length;
             dms = new DataModel[listLength];
 
@@ -89,8 +84,6 @@ namespace App15
                 ccUnit.ContentTemplate = this.Resources["singleUnit"] as DataTemplate;
                 ccUnit.Content = dms[i];
                 wrapGrid.Children.Add(ccUnit);
-
-                iconDataHT.Add(dms[i].itemIndex, dms[i]);
             }
         }
 
@@ -98,10 +91,6 @@ namespace App15
         {
             int index = (int)param;
             SetMarker(index);
-
-            // 设置icon头像 of "角色选择"
-            string icon_url = (iconDataHT[index] as DataModel).icon_url;
-            selectedIcon.Source = new BitmapImage(new Uri(icon_url));
         }
 
         private void SetMarker(int index)
