@@ -9,6 +9,7 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using System.Windows.Input;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Storage;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -67,7 +68,12 @@ namespace App15
 
         private async void InitUIData()
         {
-            string payload = "[{\"data_type\":\"xjingf\",\"data_name\":\"小晶\",\"ssml_support\":true,\"icon_url\":\"ms-appx:///Assets/femalePY.png\"},{\"data_type\":\"zhilingf\",\"data_name\":\"小灵\",\"ssml_support\":true,\"icon_url\":\"ms-appx:///Assets/femaleSoft.png\"},{\"data_type\":\"qianranfa\",\"data_name\":\"苒苒\",\"ssml_support\":true,\"icon_url\":\"ms-appx:///Assets/femaleCute.png\"},{\"data_type\":\"xijunm\",\"data_name\":\"小君\",\"ssml_support\":true,\"icon_url\":\"ms-appx:///Assets/maleCharm.png\"},{\"data_type\":\"boy\",\"data_name\":\"糖糖\",\"ssml_support\":true,\"icon_url\":\"ms-appx:///Assets/maleCute.png\"},{\"data_type\":\"xiaoxin\",\"data_name\":\"小鑫\",\"ssml_support\":true,\"icon_url\":\"ms-appx:///Assets/maleCute.png\"}]";
+            // Put Json file in below path, changed according to your project.
+            // C:\Users\xuejd1\AppData\Local\Packages\5edc05e9-c011-4f5f-8660-54a7fcce95a1_sews9q4cd2dha\LocalState\test.json
+            StorageFolder storageFolder = ApplicationData.Current.LocalFolder;
+            StorageFile testJsonFile = await storageFolder.GetFileAsync("test.json");
+            string payload = await Windows.Storage.FileIO.ReadTextAsync(testJsonFile);
+
             list = JsonData<TestDataList[]>(payload);
             iconDataHT = new Hashtable();
             listLength = list.Length;

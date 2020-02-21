@@ -1,0 +1,31 @@
+[{
+	"data_type": "xjingf",
+	"data_name": "小晶",
+	"ssml_support": true,
+	"icon_url": "ms-appx:///Assets/femalePY.png"
+}, {
+	"data_type": "zhilingf",
+	"data_name": "小灵",
+	"ssml_support": true,
+	"icon_url": "ms-appx:///Assets/femaleSoft.png"
+}, {
+	"data_type": "qianranfa",
+	"data_name": "苒苒",
+	"ssml_support": true,
+	"icon_url": "ms-appx:///Assets/femaleCute.png"
+}, {
+	"data_type": "xijunm",
+	"data_name": "小君",
+	"ssml_support": true,
+	"icon_url": "ms-appx:///Assets/maleCharm.png"
+}, {
+	"data_type": "boy",
+	"data_name": "糖糖",
+	"ssml_support": true,
+	"icon_url": "ms-appx:///Assets/maleCute.png"
+}, {
+	"data_type": "xiaoxin",
+	"data_name": "小鑫",
+	"ssml_support": true,
+	"icon_url": "ms-appx:///Assets/maleCute.png"
+}]
