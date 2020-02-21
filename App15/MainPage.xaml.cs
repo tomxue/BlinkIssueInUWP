@@ -3,8 +3,10 @@ using Newtonsoft.Json;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Windows.Input;
 using Windows.Foundation;
@@ -29,15 +31,30 @@ namespace App15
     /// </summary>
     public sealed partial class MainPage : Page
     {
-        public class DataModel
+        public class DataModel : INotifyPropertyChanged
         {
             public string icon_url { get; set; }
             public bool ssml_support { get; set; }
             public string data_name { get; set; }
             public string data_type { get; set; }
             public int itemIndex { get; set; }
-            public bool isSelected { get; set; }
+            private bool _isSelected;
+            public bool isSelected
+            {
+                get => _isSelected;
+                set
+                {
+                    _isSelected = value;
+                    this.OnPropertyChanged(nameof(isSelected));
+                }
+            }
             public ICommand ClickCommand { get; set; }
+
+            public event PropertyChangedEventHandler PropertyChanged;
+            public void OnPropertyChanged(string propertyName)
+            {
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+            }
         }
 
         public class TestDataList
@@ -48,7 +65,6 @@ namespace App15
             public string icon_url { get; set; }
         }
 
-        private Hashtable iconDataHT;
         DataModel[] dms;
         TestDataList[] list;
         int listLength;
@@ -59,9 +75,6 @@ namespace App15
             this.InitializeComponent();
 
             ApplicationView.PreferredLaunchWindowingMode = ApplicationViewWindowingMode.FullScreen;
-
-            //double appVolume = App.GetAppVolume();
-            double appVolume = 0.8;
 
             InitUIData();
         }
@@ -75,7 +88,6 @@ namespace App15
             string payload = await Windows.Storage.FileIO.ReadTextAsync(testJsonFile);
 
             list = JsonData<TestDataList[]>(payload);
-            iconDataHT = new Hashtable();
             listLength = list.Length;
             dms = new DataModel[listLength];
 
@@ -95,8 +107,6 @@ namespace App15
                 ccUnit.ContentTemplate = this.Resources["singleUnit"] as DataTemplate;
                 ccUnit.Content = dms[i];
                 wrapGrid.Children.Add(ccUnit);
-
-                iconDataHT.Add(dms[i].itemIndex, dms[i]);
             }
         }
 
@@ -104,19 +114,17 @@ namespace App15
         {
             int index = (int)param;
             SetMarker(index);
-
-            // 设置icon头像 of "角色选择"
-            string icon_url = (iconDataHT[index] as DataModel).icon_url;
-            selectedIcon.Source = new BitmapImage(new Uri(icon_url));
         }
 
         private void SetMarker(int index)
         {
-            ContentControl ccUnit = InitCCUnit(previousSelectedIndex, false);
-            wrapGrid.Children[previousSelectedIndex] = ccUnit;
+            ContentControl ccUnit = wrapGrid.Children[previousSelectedIndex] as ContentControl;
+            var previousContent = ccUnit.Content as DataModel;
+            previousContent.isSelected = false;
 
-            ccUnit = InitCCUnit(index, true);
-            wrapGrid.Children[index] = ccUnit;
+            ContentControl currentUnit = wrapGrid.Children[index] as ContentControl;
+            var currentContent = currentUnit.Content as DataModel;
+            currentContent.isSelected = true;
 
             previousSelectedIndex = index;
         }
